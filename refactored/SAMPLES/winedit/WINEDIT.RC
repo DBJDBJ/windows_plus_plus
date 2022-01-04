@@ -64,4 +64,5 @@ BEGIN
     CONTROL "Search:",-1,"static",WS_CHILD | SS_LEFT,3,8,26,10
 END
 
+// this is part of the framework
 #include "wpprint.dlg"
