@@ -2,7 +2,8 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: DRAW.RC
 //
-#include "wpp.h"
+//DBJ: why do we include the enormous wpp.h in here?
+#include "../../framework/wpp.h"
 #include "draw.h"
 
 AppIcon	ICON draw.ico
@@ -79,5 +80,6 @@ BEGIN
     CONTROL "Implemented using Windows++",-1,"static",WS_CHILD | SS_LEFT,8,22,108,8
 END
 
-#include "wpprint.dlg"
+// DBJ
+#include "../../framework/wpprint.dlg"
 

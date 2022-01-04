@@ -15,12 +15,13 @@
 
 Details
 
-Generally look into project properties, to learn. In particular:
+Generally look into project properties. In particular:
 
 1. Every Project character set must be set to: "Not Set"
    1. that is `_UNICODE` and `UNICODE` must be undefined
    2. for some reason const had not type: `const whatever = 42`
       1. so we changed all of them to `#define`'s
+2. c++ exceptions are switched off
 
 
 ---

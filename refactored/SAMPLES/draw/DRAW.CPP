@@ -4,14 +4,14 @@
 //
 // Sample Object-Oriented Graphics Editor using GPP Graphics.
 
-#include "prefix.h"
+#include "../prefix.h"
 #include <gpp.h>
 #include "draw.h"
 
 MyApp myApp; // instantiate one and only app
 
-const HIT_RADIUS = 7;		// radius for hit test
-const HANDLE_RADIUS = 3;	// radius for size handles
+constexpr int HIT_RADIUS = 7;		// radius for hit test
+constexpr int HANDLE_RADIUS = 3;	// radius for size handles
 
 enum DRAGSTATE		{ NODRAG=0, DRAGMOVE, DRAGSIZE };
 enum MOVESTATE		{ MOVEALL=0, MOVEFIRST, MOVEX, MOVEY, MOVEDIAG };
