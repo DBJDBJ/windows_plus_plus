@@ -9,10 +9,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wpp_framework", "framework\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wpp_draw", "SAMPLES\draw\wpp_draw.vcxproj", "{BBB5EDB4-D3D8-4639-A4AC-C21F00F29666}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wpp_launch", "SAMPLES\launch\wpp_launch.vcxproj", "{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		framework\wpp_framework.vcxitems*{02e3bb9f-e421-4f07-a730-891fc2d709a2}*SharedItemsImports = 9
 		framework\wpp_framework.vcxitems*{972a5390-5569-44bd-930a-4f90a6df0c33}*SharedItemsImports = 4
+		framework\wpp_framework.vcxitems*{bb8b1b23-503a-48b0-a0e6-8d8c79c3cca7}*SharedItemsImports = 4
 		framework\wpp_framework.vcxitems*{bbb5edb4-d3d8-4639-a4ac-c21f00f29666}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,14 @@ Global
 		{BBB5EDB4-D3D8-4639-A4AC-C21F00F29666}.Release|x64.Build.0 = Release|x64
 		{BBB5EDB4-D3D8-4639-A4AC-C21F00F29666}.Release|x86.ActiveCfg = Release|Win32
 		{BBB5EDB4-D3D8-4639-A4AC-C21F00F29666}.Release|x86.Build.0 = Release|Win32
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Debug|x64.ActiveCfg = Debug|x64
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Debug|x64.Build.0 = Debug|x64
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Debug|x86.ActiveCfg = Debug|Win32
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Debug|x86.Build.0 = Debug|Win32
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Release|x64.ActiveCfg = Release|x64
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Release|x64.Build.0 = Release|x64
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Release|x86.ActiveCfg = Release|Win32
+		{BB8B1B23-503A-48B0-A0E6-8D8C79C3CCA7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

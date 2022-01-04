@@ -6,35 +6,47 @@
 // it just goes right into the dialog.  Demonstrates how to subclass
 // the File Open dialog box.  Also shows how to access WIN.INI.
 
-#include "prefix.h"
+#include "../prefix.h"
 #include <stdio.h>
 #include <direct.h>
 
 MyApp myApp; // instantiate one and only app
 
-const IDM_SETDEBUGGER = 10;
+constexpr int IDM_SETDEBUGGER = 10;
 
 // These keys are used to save stuff in WIN.INI
 // 
-LPCSTR KEYDIR= "Path";
-LPCSTR KEYDEBUGSTR  = "DebugString";		 
-LPCSTR KEYSCREENPOSX= "ScreenXPos";
-LPCSTR KEYSCREENPOSY= "ScreenYPos";
+static LPCSTR KEYDIR= "Path";
+static LPCSTR KEYDEBUGSTR  = "DebugString";
+static LPCSTR KEYSCREENPOSX= "ScreenXPos";
+static LPCSTR KEYSCREENPOSY= "ScreenYPos";
 
 ////////////////
 // The Launch dialog is a special case of the file open dialog.
 // 
-class Launch : public WPDlgFileOpen {
-	char dirname[MAXFILENAMELEN];
-	char filename[MAXFILENAMELEN];
-	char debugString[30];	// debugger program; e.g., "ZDBW /2"
-	WPEdit *edFileName;		// edit control for file name
-	WPListBox *lbFileName;	// list box for file name
-	WPStatic *ssPathName;	// static text of path name
+class Launch final : public WPDlgFileOpen {
+	char dirname[MAXFILENAMELEN]{0};
+	char filename[MAXFILENAMELEN]{0};
+	char debugString[30]{0};	// debugger program; e.g., "ZDBW /2"
+	WPEdit* edFileName{};		// edit control for file name
+	WPListBox* lbFileName{};	// list box for file name
+	WPStatic* ssPathName{};	// static text of path name
 public:	
 	void initDlg();			// called for WM_INITDIALOG
 	BOOL command(int id, WORD msg);
-	Launch();
+	
+	Launch() : WPDlgFileOpen(NULL, filename, "Launch")
+	{
+		// Read stuff from WIN.INI
+		theApp->getProfile(KEYDEBUGSTR, debugString, sizeof(debugString));
+		theApp->getProfile(KEYDIR, dirname, sizeof(dirname));
+
+		// Override default OFN data
+		ofn.Flags |= OFN_SHOWHELP;
+		ofn.lpstrInitialDir = dirname;	// start w/dir from WIN.INI
+		ofn.lpstrTitle = "Launch";
+		setFilter("EXE (*.EXE)\0*.exe\0COM (*.COM)\0*.com\0");
+	}
 };
 
 void MyApp::main()
@@ -44,18 +56,18 @@ void MyApp::main()
 	dlg.run();					// ..run it
 }
 
-Launch::Launch() : WPDlgFileOpen(NULL, filename, "Launch")
-{
-	// Read stuff from WIN.INI
-	theApp->getProfile(KEYDEBUGSTR, debugString, sizeof(debugString));
-	theApp->getProfile(KEYDIR, dirname, sizeof(dirname));
-
-	// Override default OFN data
-	ofn.Flags |= OFN_SHOWHELP;
-	ofn.lpstrInitialDir = dirname;	// start w/dir from WIN.INI
-	ofn.lpstrTitle= "Launch";
-	setFilter("EXE (*.EXE)\0*.exe\0COM (*.COM)\0*.com\0");
-}
+//Launch::Launch() : WPDlgFileOpen(NULL, filename, "Launch")
+//{
+//	// Read stuff from WIN.INI
+//	theApp->getProfile(KEYDEBUGSTR, debugString, sizeof(debugString));
+//	theApp->getProfile(KEYDIR, dirname, sizeof(dirname));
+//
+//	// Override default OFN data
+//	ofn.Flags |= OFN_SHOWHELP;
+//	ofn.lpstrInitialDir = dirname;	// start w/dir from WIN.INI
+//	ofn.lpstrTitle= "Launch";
+//	setFilter("EXE (*.EXE)\0*.exe\0COM (*.COM)\0*.com\0");
+//}
 
 ////////////////
 // Initialize the dialog box.  Use screen position from WIN.INI,
