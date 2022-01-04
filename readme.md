@@ -13,6 +13,15 @@
 3. Second cycle will be refactoring the framework into headers only
    1. Then using those headers into samples
 
+Details
+
+Generally look into project properties, to learn. In particular:
+
+1. Every Project character set must be set to: "Not Set"
+   1. that is `_UNICODE` and `UNICODE` must be undefined
+   2. for some reason const had not type: `const whatever = 42`
+      1. so we changed all of them to `#define`'s
+
 
 ---
 Started 2022 January 4, by dbj at dbj dot org

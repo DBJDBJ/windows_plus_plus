@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{02e3bb9f-e421-4f07-a730-891fc2d709a2}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)GPP.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)PREFIX.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WINMAIN.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPAPP.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPCTRL.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPDLFILE.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPDLG.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPDLPRT.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPDLSTR.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPGDI.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPGLOB.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPMAIN.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPMDI.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPMENU.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPODRAW.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPRECT.CPP" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)WPWIN.CPP" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)GPP.H" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)WPP.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)WPP.DEF" />
+    <None Include="$(MSBuildThisFileDirectory)WPPRINT.DLG" />
+  </ItemGroup>
+</Project>

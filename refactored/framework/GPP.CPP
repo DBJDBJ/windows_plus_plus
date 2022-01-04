@@ -9,7 +9,7 @@
 
 WPRect	GPShape::ClipRect;
 BOOL		GPShape::DoClip=FALSE;
-const		MINBOUNDS = 4;
+#define 	MINBOUNDS 4
 
 //////////////////
 // Set global clipping rectangle

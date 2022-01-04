@@ -264,7 +264,7 @@ BOOL WPApp::setProfile(LPCSTR key, int val, LPCSTR app)
 
 	makeIniFileName(scratch);
 	char buf[16];
-	itoa(val, buf, 10);
+	_itoa(val, buf, 10);
 	return WritePrivateProfileString(app, key, buf, scratch);
 }
 

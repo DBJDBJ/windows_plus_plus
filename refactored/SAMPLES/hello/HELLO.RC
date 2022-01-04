@@ -2,7 +2,8 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: HELLO.RC
 //
-#include "wpp.h"
+//DBJ: why do we include the enormous wpp.h in here?
+#include "../../framework/wpp.h"
 
 AppIcon	ICON hello.ico
 

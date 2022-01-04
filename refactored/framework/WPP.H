@@ -1,3 +1,4 @@
+// 2022 Refactoring by dbj at dbj dot org
 //////////////////////////////////////////////////////////
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992, 1993 Paul DiLascia.
 // FILE: WPP.H
@@ -26,6 +27,7 @@
 #	error "Unsupported compiler."
 #endif
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string.h>
 #include <stdlib.h>
@@ -156,10 +158,10 @@
 #include <windows.h>
 #include <commdlg.h>
 
-
-const MAXINT = 0x7fff;
-const MAXFILENAMELEN = 128;
-const MAXSTRLEN = 256;
+#undef MAXINT
+#define  MAXINT 0x7fff
+#define  MAXFILENAMELEN 128
+#define  MAXSTRLEN 256
 
 //////////////////
 // Roll our own assert macro for uniformity between compilers.
@@ -183,6 +185,7 @@ const MAXSTRLEN = 256;
 #	define DLLFUNC  __declspec ( dllimport )
 #	define DLLCLASS class __declspec ( dllimport )
 #else
+//  DBJ: we will not build DLL, thus landing here
 #	define DLLFUNC
 #	define DLLCLASS class
 #endif
@@ -204,7 +207,7 @@ extern void DLLFUNC WPTrace(LPCSTR pszFormat, ...);
 // Useful MsgBox and MsgBeep functions.
 // 
 inline int MsgBox(LPCSTR text, LPCSTR caption="", int type=MB_OK) 
-{ return MessageBox(NULL, text, caption, type); }
+{ return MessageBoxA(NULL, text, caption, type); }
 
 inline void MsgBeep(WORD type=0) 
 { MessageBeep(type); }
@@ -420,7 +423,7 @@ public:
 	WPModule(HINSTANCE h=NULL)	
 		{ hinst = h; modname[0]=0; }
 	WPModule(LPCSTR nm)
-		{ strcpy(modname, nm); hinst = GetModuleHandle(modname); }
+		{ strcpy(modname, nm); hinst = GetModuleHandleA(modname); }
 	~WPModule() { }
 
 	HINSTANCE getHinst()				{ return hinst; }
@@ -428,33 +431,33 @@ public:
 
  	LPCSTR getName();
 	int getFileName(char *buf, int buflen)
-		{ return GetModuleFileName(hinst, buf, buflen); }
+		{ return GetModuleFileNameA(hinst, buf, buflen); }
 	
 	FARPROC getProcAddress(LPCSTR procname)
 		{ return GetProcAddress(hinst, procname); }
 
 	HMENU loadMenu(LPCSTR name)			
-		{ return LoadMenu(hinst, name); }
+		{ return LoadMenuA(hinst, name); }
 	HBITMAP loadBitmap(LPCSTR name)		
-		{ return LoadBitmap(hinst, name); }
+		{ return LoadBitmapA(hinst, name); }
 	HBITMAP loadBitmap(int id)			
 		{ return LoadBitmap(hinst, MAKEINTRESOURCE(id)); }
 	HICON loadIcon(LPCSTR name)		
-		{ return LoadIcon(HIWORD(name) ? hinst : NULL, name); }
+		{ return LoadIconA(HIWORD(name) ? hinst : NULL, name); }
 	HICON loadIcon(int id)		
-		{ return LoadIcon(hinst, MAKEINTRESOURCE(id)); }
+		{ return LoadIconA(hinst, MAKEINTRESOURCEA(id)); }
 	HCURSOR loadCursor(LPCSTR name)
-		{ return LoadCursor(HIWORD(name) ? hinst : NULL, name); }
+		{ return LoadCursorA(HIWORD(name) ? hinst : NULL, name); }
 	HCURSOR loadCursor(int id)		
 		{ return LoadCursor(hinst, MAKEINTRESOURCE(id)); }
 	int loadString(int id, LPSTR buf, int len=MAXSTRLEN)
-		{ return LoadString(hinst, id, buf, len); }
+		{ return LoadStringA(hinst, id, buf, len); }
 
 	HRSRC findResource(LPCSTR name, LPCSTR type)
-		{ return FindResource(hinst, name, type); }
+		{ return FindResourceA(hinst, name, type); }
 	int loadResource(LPCSTR name, LPCSTR type, LPSTR buf, int len);
 	int loadResource(int id, LPCSTR type, LPSTR buf, int len)
-		{ return loadResource(MAKEINTRESOURCE(id), type, buf, len); }
+		{ return loadResource(MAKEINTRESOURCEA(id), type, buf, len); }
 };
 
 //////////////////
@@ -517,7 +520,7 @@ public:
 	void addDialog(WPDialogModeless *dlg);
 	void removeDialog(WPDialogModeless *dlg);
 	HACCEL loadAccel(LPCSTR acname)
-		{ return accel = LoadAccelerators(hinst, acname); }
+		{ return accel = LoadAcceleratorsA(hinst, acname); }
 
 	// Application profile file
 	int  getProfile(LPCSTR key,char *buf,int len,LPCSTR dflt="",LPCSTR app=NULL);
@@ -640,7 +643,7 @@ public:
 	static WPWin* GetActiveWin()	{ return GetWin(GetActiveWindow()); }
 	static WPWin* GetFocusWin()	{ return GetWin(GetFocus()); }
 	static WPWin* FindWin(LPCSTR clsnm, LPCSTR winnm)
-		{ return GetWin(FindWindow(clsnm, winnm)); }
+		{ return GetWin(FindWindowA(clsnm, winnm)); }
 	static WPWin* WinFromPoint(WPPoint p)	
 		{ return GetWin(WindowFromPoint(p)); }
 
@@ -655,9 +658,9 @@ public:
 		{ return SendMessage(hwnd, msg, wp, (LPARAM)str); }
 
 	// Properties
-	HANDLE getProp(LPCSTR kwd)				{ return GetProp(hwnd, kwd); }
-	void setProp(LPCSTR kwd, HANDLE val)	{ SetProp(hwnd, kwd, val); }
-	void removeProp(LPCSTR kwd)				{ RemoveProp(hwnd, kwd); }
+	HANDLE getProp(LPCSTR kwd)				{ return GetPropA(hwnd, kwd); }
+	void setProp(LPCSTR kwd, HANDLE val)	{ SetPropA(hwnd, kwd, val); }
+	void removeProp(LPCSTR kwd)				{ RemovePropA(hwnd, kwd); }
 
 	// Parent/child stuff
 	int getID()						{ return GetWindowLong(hwnd, GWL_ID); }
@@ -711,12 +714,12 @@ public:
 		{ return	KillTimer(hwnd, id); }	
 
 	int msgBox(LPCSTR text, LPCSTR caption="", UINT style=MB_OK)
-		{ return MessageBox(hwnd, text, caption, style); }
+		{ return MessageBoxA(hwnd, text, caption, style); }
 	int warning(LPCSTR text, UINT style=MB_OK)
 		{ return msgBox(text, "Warning!", style|MB_ICONQUESTION); }
 	int errBox(LPCSTR text, LPCSTR caption=NULL, 
 		UINT style=MB_OK|MB_ICONEXCLAMATION)
-		{ return MessageBox(hwnd, text, caption, style); }
+		{ return MessageBoxA(hwnd, text, caption, style); }
 
 	// Coordinates
 	void clientToScreen(POINT* p)		{ ClientToScreen(hwnd, p); }
@@ -737,10 +740,10 @@ public:
 	BOOL hide()								{ return ShowWindow(hwnd, SW_HIDE); }
 	void showOwnedPopups(BOOL show)	{ ShowOwnedPopups(hwnd, show); }
 
-	void setText(LPCSTR text)	{ SetWindowText(hwnd, text); }
+	void setText(LPCSTR text)	{ SetWindowTextA(hwnd, text); }
 	int getText()					{ return GetWindowTextLength(hwnd); }
 	int getText(LPSTR buf, int buflen)
-		{ return GetWindowText(hwnd, buf, buflen); }
+		{ return GetWindowTextA(hwnd, buf, buflen); }
 
 	void close()				{ sendMsg(WM_CLOSE); }
 	void minimize()			{ CloseWindow(hwnd); }
@@ -756,7 +759,7 @@ public:
 	BOOL flash(BOOL invert=TRUE)
 		{ return FlashWindow(hwnd, invert); }
 	int getClassName(LPSTR buf, int buflen)
-		{ return GetClassName(hwnd, buf, buflen); }
+		{ return GetClassNameA(hwnd, buf, buflen); }
 
 	LONG style()				{ return GetWindowLong(hwnd, GWL_STYLE); }
 	LONG style(LONG style)	{ return SetWindowLong(hwnd, GWL_STYLE, style);}
@@ -870,7 +873,7 @@ public:
 	int subType()						{ return GetKeyboardType(1); }
 	int numFnKeys()					{ return GetKeyboardType(2); }
 	int keyName(LONG lparam, char *buf, int buflen)
-		{ return GetKeyNameText(lparam, buf, buflen); }
+		{ return GetKeyNameTextA(lparam, buf, buflen); }
 	int state(int vkey)				{ return GetKeyState(vkey); }
 	void getState(BYTE* buf)		{ GetKeyboardState(buf); }
 	void setState(BYTE* buf)		{ SetKeyboardState(buf); }
@@ -944,22 +947,22 @@ extern WPCaret Caret;
 DLLCLASS WPWinIni {
 public:
 	int get(LPCSTR app, LPCSTR key, char *buf, int buflen, LPCSTR dflt="")
-		{ return GetProfileString(app, key ? key : NULL, dflt, buf, buflen); }
+		{ return GetProfileStringA(app, key ? key : NULL, dflt, buf, buflen); }
 
 	int get(LPCSTR app, LPCSTR key, int dflt=0)
-		{ return GetProfileInt(app, key, dflt); }
+		{ return GetProfileIntA(app, key, dflt); }
 
 	int getPrinterName(char* buf, int len);
 
 	BOOL set(LPCSTR app, LPCSTR key, LPCSTR val)
-		{ return WriteProfileString(app, key, val); }
+		{ return WriteProfileStringA(app, key, val); }
 	BOOL set(LPCSTR app, LPCSTR key, int val)
 		{ char buf[16];
-		  itoa(val, buf, 10);
-		  return WriteProfileString(app, key, buf); }
+		  _itoa(val, buf, 10);
+		  return WriteProfileStringA(app, key, buf); }
 
 	int getKeys(LPCSTR app, char *buf, int buflen)
-		{ return GetProfileString(app, NULL, "", buf, buflen); }
+		{ return GetProfileStringA(app, NULL, "", buf, buflen); }
 
 };
 extern WPWinIni WinIni;
@@ -978,11 +981,11 @@ public:
 	int numFormats()				{ return CountClipboardFormats(); }
 
 	int formatName(WORD fmt, char *buf, int buflen)
-		{ return GetClipboardFormatName(fmt, buf, buflen); }
+		{ return GetClipboardFormatNameA(fmt, buf, buflen); }
 	int getPriorityFormat(UINT *priorityList, int len)
 		{ return GetPriorityClipboardFormat(priorityList, len); }
 	WORD registerFormat(LPCSTR name)
-		{ return RegisterClipboardFormat(name); }
+		{ return RegisterClipboardFormatA(name); }
 };
 extern WPClipboard Clipboard;
 
@@ -1041,7 +1044,7 @@ public:
 //
 // Definitions for WPMainWin, which represents a main window.
 
-const MAXPROMPTLEN = 80;
+#define MAXPROMPTLEN 80
 
 //////////////////
 // Main application window. Each application has one.
@@ -1829,7 +1832,7 @@ public:
 	WORD state(int id, WORD how=MF_DFLTPOS)
 		{ return GetMenuState(hmenu, id, how); }
 	int getText(int id, char *buf, int buflen, WORD how=MF_DFLTPOS)
-		{ return GetMenuString(hmenu, id, buf, buflen, how); }
+		{ return GetMenuStringA(hmenu, id, buf, buflen, how); }
 
 	BOOL checkItem(int id, BOOL chk, WORD how=MF_DFLTPOS)
 		{ return CheckMenuItem(hmenu, id, 
@@ -1847,27 +1850,27 @@ public:
 		WORD how=MF_DFLTPOS);
 
 	BOOL append(int id, LPCSTR text, WORD flags=0) 
-		{ return AppendMenu(hmenu, MF_STRING|flags, id, text); }
+		{ return AppendMenuA(hmenu, MF_STRING|flags, id, text); }
 	BOOL append(WPMenu& popup, LPCSTR text)
-		{ return AppendMenu(hmenu, MF_POPUP, (UINT)popup(), text); }
+		{ return AppendMenuA(hmenu, MF_POPUP, (UINT)popup(), text); }
 	BOOL append(int id, WPBitmap& bm, WORD flags=0);
 	BOOL appendSep() 
 		{ return AppendMenu(hmenu, MF_SEPARATOR, 0, NULL); }
 	HMENU appendPopup(LPCSTR text);
 
 	BOOL insert(int pos, int id, LPCSTR text, WORD flags=MF_DFLTPOS) 
-		{ return InsertMenu(hmenu, pos, MF_STRING|flags, id, text); }
+		{ return InsertMenuA(hmenu, pos, MF_STRING|flags, id, text); }
 	BOOL insert(int pos, WPMenu& popup, LPCSTR text, WORD flags=MF_DFLTPOS)
-		{ return InsertMenu(hmenu, pos, MF_POPUP|flags, (UINT)popup(), text); }
+		{ return InsertMenuA(hmenu, pos, MF_POPUP|flags, (UINT)popup(), text); }
 	BOOL insert(int pos, int id, WPBitmap& bm, WORD flags=MF_DFLTPOS);
 	BOOL insertSep(int pos, WORD flags=MF_DFLTPOS)
 		{ return InsertMenu(hmenu, pos, MF_SEPARATOR|flags, 0, NULL); }
 	HMENU insertPopup(int pos, LPCSTR text, WORD flags=MF_DFLTPOS);
 
 	BOOL modify(int pos, int id, LPCSTR text, WORD flags=MF_DFLTPOS) 
-		{ return ModifyMenu(hmenu, pos, MF_STRING|flags, id, text); }
+		{ return ModifyMenuA(hmenu, pos, MF_STRING|flags, id, text); }
 	BOOL modify(int pos, WPMenu& popup, LPCSTR text, WORD flags=MF_DFLTPOS)
-		{ return ModifyMenu(hmenu, pos, MF_POPUP|flags, (UINT)popup(), text); }
+		{ return ModifyMenuA(hmenu, pos, MF_POPUP|flags, (UINT)popup(), text); }
 	BOOL modify(int pos, int id, WPBitmap& bm, WORD flags=MF_DFLTPOS);
 
 	BOOL remove(int pos, WORD flags=MF_DFLTPOS)
@@ -1907,12 +1910,12 @@ public:
 //
 // GDI (Graphics Device Interface) definitions.
 
-const DWORD	COLOR_RED	= RGB(0xFF,0,0);
-const DWORD	COLOR_GREEN	= RGB(0,0xFF,0);
-const DWORD	COLOR_BLUE	= RGB(0,0,0xFF);
-const DWORD COLOR_BLACK = 0;
-const DWORD COLOR_WHITE = 0x00FFFFFF;
-const DWORD COLOR_NONE	= 0xFFFFFFFF;
+constexpr DWORD	COLOR_RED	= RGB(0xFF,0,0);
+constexpr DWORD	COLOR_GREEN	= RGB(0,0xFF,0);
+constexpr DWORD	COLOR_BLUE	= RGB(0,0,0xFF);
+constexpr DWORD COLOR_BLACK = 0;
+constexpr DWORD COLOR_WHITE = 0x00FFFFFF;
+constexpr DWORD COLOR_NONE	= 0xFFFFFFFF;
 
 //////////////////
 // This little structure is used to parse the driver and output names
@@ -2267,11 +2270,11 @@ public:
 	DWORD textColor()						{ return GetTextColor(hdc); }
 	DWORD textColor(COLORREF c)		{ return SetTextColor(hdc, c); }
 	DWORD textExtent(LPCSTR text, int len)
-		{ return GetTabbedTextExtent(hdc, text, len, ntabs, (LPINT)tabs); }
+		{ return GetTabbedTextExtentA(hdc, text, len, ntabs, (LPINT)tabs); }
 	DWORD textExtent(LPCSTR text)
 		{ return textExtent(text, strlen(text)); }
 	int textFace(LPSTR buf, int len)			
-		{ return GetTextFace(hdc, len, buf); }
+		{ return GetTextFaceA(hdc, len, buf); }
 	BOOL textMetrics(TEXTMETRIC &tm)
 		{ return GetTextMetrics(hdc, (LPTEXTMETRIC)&tm); }
 
@@ -2332,7 +2335,7 @@ public:
 			srcDC.hdc, s.left, s.top, s.width(), s.height(), rop); }
 
 	long textOut(int x, int y, LPCSTR text, int len) 
-		{ return TabbedTextOut(hdc,x,y,text,len,ntabs,(LPINT)tabs,tabOrg); }
+		{ return TabbedTextOutA(hdc,x,y,text,len,ntabs,(LPINT)tabs,tabOrg); }
 	long textOut(int x, int y, LPCSTR text)
 		{ return textOut(x, y, text, strlen(text)); }
 	long printF(WPPoint p, LPSTR format, ...);

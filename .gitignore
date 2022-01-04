@@ -1,2 +1,7 @@
 original/
 refactored/book_developments/
+.vs/
+Debug/
+Release/
+x64/
+*.vcxproj.user

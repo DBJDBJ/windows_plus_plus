@@ -94,7 +94,7 @@ WPDEVNAME::WPDEVNAME(LPCSTR devname)
 	outputName = strtok(NULL,",");
 }
 
-const MAXSTOCKOBJ = 32;
+#define MAXSTOCKOBJ 32
 
 //////////////////
 // Private method to select a display object
@@ -356,6 +356,8 @@ WPPrinter::WPPrinter(WPDlgPrint& pdlg) : WPDevContext(pdlg.getHDC())
 	delDC=FALSE; 
 }
 
+// DBJ decalred here
+BOOL CALLBACK WPPrintAbortProc(HDC hdcPrn, int nCode);
 //////////////////
 // Do abort dialog
 // 
