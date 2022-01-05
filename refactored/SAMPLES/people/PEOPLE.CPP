@@ -16,7 +16,7 @@ using std::ostream ;
 
 MyApp myApp; // instantiate one and only app
 
-class CBUSStates : public WPComboBox, public WPListData {
+class CBUSStates final : public WPComboBox, public WPListData {
 	static LPCSTR States[];
 	int curState;
 public:
@@ -42,7 +42,7 @@ LPCSTR CBUSStates::States[] = {
 //////////////////
 // Special kind of edit control lets user type digits only.
 // 
-class EditZip : public WPEdit {
+class EditZip final : public WPEdit {
 public:
 	EditZip(WPWin *pwin, int id) : WPEdit(pwin, id) 
 		{ setLegalChars("0123456789-"); createWin(); }
@@ -209,7 +209,7 @@ BOOL AltIcon::timer(int id)
 ////////////////
 // Special About dialog box w/animated icon.
 // 
-class AboutPeople : public WPDialogModal {
+class AboutPeople  final : public WPDialogModal {
 public:
 	AboutPeople(WPWin *pwin) : WPDialogModal("DLGABOUT",pwin) 
 		{ createWin(); }

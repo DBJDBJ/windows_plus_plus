@@ -16,17 +16,15 @@
   - toe
   - winedit
 
-How does that look? Archaic. Is it working? Very much so. Simple, small and very functional Win32 C++ framework. Perfectly usable.
+How does that look? Archaic. Is it working? Very much so. Simple, small and very functional Win32 C++ framework. Pretty clean design and implementations. Almost no macros. Perfectly usable.
 
-This is kind-of-a ["orthodox C++"](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) in here. Although Orthodox C++ term was invented years (decades?) after Windows++. In here it is simply ancient C++. 
-
-MS C/C++ 10.0 or greater is required. That is old.
-
-In here there is also, no std lib whatsoever. No C++ exceptions.  C++ dialect in here is perhaps even predating C++03.
-
-For refactoring we used C++14 (because that is Visual Studio 2019 default).
-
-Win32 is used as much as possible. CRT and [UCRT](https://stackoverflow.com/questions/67848972/differences-between-msvcrt-ucrt-and-vcruntime-libraries) usage, will be eventually completely removed.
+- This is kind-of-a ["orthodox C++"](https://gist.github.com/bkaradzic/2e39896bc7d8c34e042b) in here. Although Orthodox C++ term was invented years (decades?) after Windows++. In here it is simply ancient C++. 
+- MS C/C++ 10.0 or greater was required. That is old.
+- In here there is also, no std lib whatsoever. No C++ exceptions.  This C++ dialect in here is perhaps even predating C++03.
+- For refactoring we used C++14 (because that is Visual Studio 2019 default).
+  - Correction: `samples\people` is using two `std::` headers `fstream` and `iomanip`
+- Win32 is used as much as possible. 
+  - CRT and [UCRT](https://stackoverflow.com/questions/67848972/differences-between-msvcrt-ucrt-and-vcruntime-libraries) usage, will be eventually completely removed.
 
 
 ### Refactoring Strategy

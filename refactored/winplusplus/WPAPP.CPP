@@ -127,7 +127,7 @@ void WPApp::run()
 	MSG msg;
 	BOOL peek=TRUE;
 	
-	while (peek || GetMessage(&msg, NULL, 0, 0)) {
+		while (peek || GetMessage(&msg, NULL, 0, 0)) {
 		if (peek) {
 			// We are doing peek message (app specified doIdle function)
 			if (!PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -194,15 +194,7 @@ void WPApp::removeDialog(WPDialogModeless *dlg)
 // The following functions access the Application's profile (.INI) file.
 ////////////////////////////////////////////////////////////////////////
 
-//////////////////
-// Make .INI filename from module name (appname.INI).
-// 
-void WPApp::makeIniFileName(char *buf)
-{
-	lstrcpy(buf, getName());
-	buf[8]=0;
-	strcat(buf, ".ini");
-}
+
 
 //////////////////
 // Get appliation profile string.  If no appname is specified,
@@ -218,7 +210,7 @@ int WPApp::getProfile(LPCSTR key, char *buf,
 	if (useWININI) 
 		return WinIni.get(app, key, buf, buflen, dflt);
 
-	makeIniFileName(scratch);
+	makeIniFileName( sizeof(scratch), scratch);
 	return GetPrivateProfileString(app, key, dflt, buf, buflen, scratch);
 }
 
@@ -233,7 +225,7 @@ int WPApp::getProfile(LPCSTR key, int dflt, LPCSTR app)
 	if (useWININI)
 		return WinIni.get(app, key, dflt);
 
-	makeIniFileName(scratch);
+	makeIniFileName(sizeof(scratch),scratch);
 	return GetPrivateProfileInt(app, key, dflt, scratch);
 }
 
@@ -248,7 +240,7 @@ BOOL WPApp::setProfile(LPCSTR key, LPCSTR val, LPCSTR app)
 	if (useWININI)
 		return WinIni.set(app, key, val);
 
-	makeIniFileName(scratch);
+	makeIniFileName(sizeof(scratch),scratch);
 	return WritePrivateProfileString(app, key, val, scratch);
 }
 
@@ -263,7 +255,7 @@ BOOL WPApp::setProfile(LPCSTR key, int val, LPCSTR app)
 	if (useWININI)
 		return WinIni.set(app, key, val);
 
-	makeIniFileName(scratch);
+	makeIniFileName(sizeof(scratch), scratch);
 	char buf[16];
 	_itoa(val, buf, 10);
 	return WritePrivateProfileString(app, key, buf, scratch);
@@ -281,14 +273,11 @@ int DLLFUNC ErrBox(LPCSTR format, ...)
 {
   char buf[BUFSIZ]{};
 
-	va_list argptr;
+	va_list argptr{};
 	va_start(argptr, format);
-	vsprintf(buf, format, argptr);
         
-	if (S_OK != dbjwin_vsprintfa(buf, sizeof(buf), format, argptr)
-                                     ) {
-          DoAssert("dbjwin_vsprintfa failed", __FILE__,__LINE__);
-        }
+	dbjwin_verify(S_OK ==
+                      dbjwin_vsprintfa(buf, sizeof(buf), format, argptr));
 	va_end(argptr);
 	return MessageBox(NULL, buf, NULL, MB_OK | MB_ICONEXCLAMATION);
 }
@@ -299,15 +288,23 @@ int DLLFUNC ErrBox(LPCSTR format, ...)
 // 
 int DLLFUNC StringCopy(char *dest, int buflen, LPCSTR src)
 {
-	int rlen = lstrlen(src);
-	int len = min(buflen-1, rlen);
-	if (len>0) {
-		if ( lstrcpynA(dest, src, len))
-		dest[len]=0;
-                else 
-                  DoAssert("lstrcpynA failed", __FILE__,__LINE__);
-	}
-	return rlen;
+  size_t src_len{};
+  if (S_OK == dbjwin_strlena(src, buflen, &src_len)) {
+    if( S_OK != dbjwin_strncpya(dest, buflen, src, src_len))
+		DoAssert("dbjwin_strncpya failed", __FILE__, __LINE__);
+  } else {
+    DoAssert("StringCopy failed; source size > destination size", __FILE__, __LINE__);
+  }
+  return src_len;
+	//int rlen = lstrlen(src);
+	//int len = min(buflen-1, rlen);
+	//if (len>0) {
+	//	if ( lstrcpynA(dest, src, len))
+	//	dest[len]=0;
+	//               else 
+	//                 DoAssert("lstrcpynA failed", __FILE__,__LINE__);
+	//}
+	//return rlen;
 }
 
 //////////////////
@@ -318,8 +315,8 @@ void DLLFUNC DoAssert(LPCSTR msg, LPCSTR file, unsigned line)
 	TRACE("Windows++: assertion failure in file %s, line %u: \"%s\"\n", 
 		file, line, msg);
 
-	char buf[80];
-	sprintf(buf,"at line %u in file %s: \"%s\"",line,file,msg);
+	char buf[BUFSIZ]{};
+    dbjwin_sprintfa(buf, BUFSIZ, "at line %u in file %s: \"%s\"", line, file, msg);
 	MsgBeep();
 	if (MsgBox(buf,"ASSERTION FAILURE",
 			MB_OKCANCEL|MB_ICONSTOP|MB_TASKMODAL)!=IDOK)
@@ -333,15 +330,19 @@ void WPTrace(LPCSTR format, ...)
 {
 	va_list args;
 	va_start(args, format);
-	char buf[256];
-	wvsprintf(buf, format, args);
-	OutputDebugString(buf);
+        char buf[BUFSIZ]{};
+        if ( S_OK == dbjwin_vsprintfa(buf, BUFSIZ, format, args))
+					OutputDebugStringA(buf);
+		else 
+					OutputDebugStringA("dbjwin_vsprintfa() failed");
 	va_end(args);
 }
 
 //////////////////
 // FAR version of strchr
 //
+/*
+
 LPSTR DLLFUNC lstrchr(LPSTR str, int c)
 {
 	if (str) {
@@ -350,4 +351,7 @@ LPSTR DLLFUNC lstrchr(LPSTR str, int c)
 	}
 	return (str && *str) ? str : NULL;
 }
+   that was 1992
+*/
+#define lstrchr strchr
 

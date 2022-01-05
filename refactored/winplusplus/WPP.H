@@ -34,6 +34,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <commdlg.h>
+
+#include "dbjwin_strsafe.h"
 #endif
 
 //////////////////////////////////////////////////////////
@@ -175,6 +177,9 @@
 #	define assert(x)	((void)((x) || (DoAssert(#x,__FILE__,__LINE__),1)))
 #	define TRACE ::WPTrace
 #endif
+
+// DBJ added
+#define dbjwin_verify(x) ((void)((x) || (DoAssert(#x, __FILE__, __LINE__), 1)))
 
 //////////////////
 // Stuff to make DLL classes work
@@ -417,8 +422,8 @@ public:
 // 
 DLLCLASS WPModule {
 protected:
-	char modname[16];			// module name
-	HINSTANCE hinst;			// module handle
+  char modname[BUFSIZ]{};  // module name, was 16 chars
+ HINSTANCE hinst{};       // module handle
 
 public:
 	WPModule(HINSTANCE h=NULL)	
@@ -497,7 +502,12 @@ protected:
 	virtual void main()=0;
 	virtual void run();
 
-	void makeIniFileName(char *buf);
+        // Make .INI filename from module name (appname.INI).
+        void makeIniFileName(unsigned buf_len_, char* buf) {
+         LPCSTR module_name_ = getName();
+          assert(module_name_);
+           dbjwin_verify( S_OK ==  dbjwin_sprintfa(buf, buf_len_, "%s.ini", module_name_));
+        }
 
 	friend int PASCAL WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 	friend WPMDIClient;
