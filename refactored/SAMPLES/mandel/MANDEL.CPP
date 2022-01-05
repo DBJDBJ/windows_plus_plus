@@ -7,7 +7,7 @@
 #include "../prefix.h"
 #include <time.h>
 #include "mandel.h"
-#include "../complex.h"
+#include "complex.h"
 
 MyApp myApp; // instantiate one and only app
 

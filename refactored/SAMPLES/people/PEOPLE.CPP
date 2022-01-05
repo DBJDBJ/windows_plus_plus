@@ -3,10 +3,16 @@
 // FILE: PEOPLE.CPP
 //
 
-#include "prefix.h"
+#include "../prefix.h"
 #include "people.h"
-#include <fstream.h>
-#include <iomanip.h>
+//#include <fstream.h>
+//#include <iomanip.h>
+// that above was a long time ago
+#include <fstream>
+#include <iomanip>
+
+using std::istream ;
+using std::ostream ;
 
 MyApp myApp; // instantiate one and only app
 
@@ -53,18 +59,18 @@ class Person {
 // DlgEditPerson::ControlMap should be able to access its members. Borland
 // handles this correctly (hooray), but not Microsoft nor Zortech (boo).
 public:
-	char		name[50];
-	char		addr[50];
-	char		city[30];
-	char		zip[10];
-	char		phone[15];
-	char		state[3];
-	int		status;
-	BOOL		selected;
+char name[50]{};
+ char addr[50]{};
+char city[30]{};
+ char zip[10]{};
+char phone[15]{};
+ char state[3]{};
+int status{};
+ BOOL selected{};
 
 	Person()	{ clear(); }
-	Person	*next;			// next person in list
-	Person	*prev;			// previous person in list
+ Person *next{};  // next person in list
+        Person *prev{};  // previous person in list
 	
 	int format(char *buf, int len)
 		{ return sprintf(buf,"%s\t%s", name, phone); }
@@ -161,7 +167,7 @@ ostream& operator<<(ostream& os, Person& p)
 //////////////////
 // Alternating icon is special kind of static icon.
 // 
-class AltIcon : public WPStaticIcon {
+class AltIcon final : public WPStaticIcon {
 	HICON icon1;
 	HICON icon2;
 	HICON whichIcon;
@@ -213,15 +219,16 @@ public:
 
 // tab stops for main list window
 static int TABS[] = { 100, 150, 200 };
-const NTABS = sizeof(TABS)/sizeof(TABS[0]);
+constexpr int NTABS = sizeof(TABS)/sizeof(TABS[0]);
 
-class PeopleWin : public WPMainWin, public WPListData {
-	WPListBox *lbPeople;
-	Person *firstPerson;
-	Person *curPerson;
-	int nPerson;
-	int nPeople;
-public:
+class PeopleWin final : public WPMainWin, public WPListData {
+  WPListBox *lbPeople{};
+  Person *firstPerson{};
+  Person *curPerson{};
+  int nPerson{};
+  int nPeople{};
+
+ public:
 	PeopleWin(LPCSTR fname);
 	~PeopleWin();
 
@@ -250,7 +257,7 @@ public:
 
 void MyApp::main()
 {
-	char fname[80];
+  char fname[BUFSIZ]{};
 	getCmdLine(fname);
 	mainWin = new PeopleWin(fname);
 	run();
@@ -353,7 +360,7 @@ BOOL PeopleWin::fileOpen(LPCSTR fname)
 {
 	char buf[MAXFILENAMELEN];
 	lstrcpyn(buf, fname, MAXFILENAMELEN);
-	ifstream inf(buf);
+	std::ifstream inf(buf);
 	if (!inf)
 		return FALSE;
 
@@ -384,7 +391,7 @@ BOOL PeopleWin::fileSave(LPCSTR fname)
 {
 	char buf[MAXFILENAMELEN];
 	lstrcpyn(buf, fname, MAXFILENAMELEN);
-	ofstream fout(buf);
+	std::ofstream fout(buf);
 	if (fout) {
 		for (Person* p = firstPerson; p; p=p->next)
 			fout << *p;

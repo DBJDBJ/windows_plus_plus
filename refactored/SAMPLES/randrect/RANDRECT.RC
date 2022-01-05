@@ -2,7 +2,7 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: RANDRECT.RC
 //
-#include "wpp.h"
+#include "../../winplusplus/wpp.h"
 
 AppIcon	ICON randrect.ico
 

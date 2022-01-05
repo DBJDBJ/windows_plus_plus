@@ -1,7 +1,7 @@
 
 ## This is an attempt in refactoring 1992 ["Windows++"](https://web.archive.org/web/20090606220454/http://www.dilascia.com/wpp.htm) by [Paul Di Lascia](https://en.wikipedia.org/wiki/Paul_DiLascia)
 
-**What is built and ad-hoc tested to date (2022-01-05):**
+**What is built and ad-hoc tested to date (2022-01-05) is all in the sample folder:**
 
 - samples
   - draw
@@ -11,6 +11,10 @@
   - medit (has redraw issues)
   - memtest
   - mkc
+  - people
+  - randrect
+  - toe
+  - winedit
 
 How does that look? Archaic. Is it working? Very much so. Simple, small and very functional Win32 C++ framework. Perfectly usable.
 
@@ -27,15 +31,16 @@ Win32 is used as much as possible. CRT and [UCRT](https://stackoverflow.com/ques
 
 ### Refactoring Strategy
 
-1. We will not use the make files, only Visual Studio solution and projects
+1. Not using the make files, only Visual Studio solution and projects
 1. Paul has originally built a DLL. 
    1. In 2021 we know for various good reasons C++ and DLL's don't work well together.
-2. First attempt will consist of creating Visual Studio (VS) projects; one for each sample.
-   1. Each VS project will be simple Windows App.
-   2. Where the framework code will be included as code. 
+   2. thus a lib is made
+2. First cycle consist of creating Visual Studio (VS) projects; one for each sample.
+   1. Each VS project is simple Windows App.
+   2. Framework is referenced (used) as a lib project
 3. Second cycle will be refactoring the framework into headers only
    1. Then using those headers into samples
-2. Minimize of completely remove UCRT usage
+4. Minimize of completely remove UCRT usage
    1. `dbjwin_strsafe.h` is a step in that direction
 
 ### Usage
@@ -51,19 +56,15 @@ Win32 is used as much as possible. CRT and [UCRT](https://stackoverflow.com/ques
    1. **Problem**: RC files do include `wpp.h` and `wprint.dlg` by using the relative path
       1. obviously `RC_INVOKED` parts will be taken out of `wpp.h`
 
-### Details
+### Details for the codenauts
 
 Generally look into project properties. In particular:
 
 1. "Windows++" was not UNICODE enabled. Every SAMPLES Project character set must be set to: "Not Set"
-   1. that is `_UNICODE` and `UNICODE` must be **undefined**
-   2. for some reason `const` had not type: `const whatever = 42`
-      1. I can not recall that was a legal C++ syntax in the past?
-      2. so we changed all of them to `#define`'s
-2. c++ exceptions are switched off
-3. c++ std lib will not be used
-4. crt use will be minimised
-5. Also: https://stackoverflow.com/questions/55781685/how-to-get-clang-format-working-in-visual-studio
+1. that is `_UNICODE` and `UNICODE` must be **undefined**
+   2. for some reason `const` had not type e.g.: `const whatever = 42`
+   1. I can not recall that was a legal C++ syntax in the past?
+   2. so we changed all of them.
 
 
 ---

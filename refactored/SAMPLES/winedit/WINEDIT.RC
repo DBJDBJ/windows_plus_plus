@@ -2,7 +2,7 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: WINEDIT.RC
 //
-#include "wpp.h"
+#include "../../winplusplus/wpp.h"
 
 AppMenu MENU { 
 	POPUP "&File" { 
@@ -65,4 +65,4 @@ BEGIN
 END
 
 // this is part of the framework
-#include "wpprint.dlg"
+#include "../../winplusplus/wpprint.dlg"

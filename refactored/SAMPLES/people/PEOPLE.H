@@ -5,7 +5,7 @@
 #ifndef PEOPLE_H
 #define PEOPLE_H
 
-#include <wpp.h>
+#include <winplusplus/wpp.h>
 
 ////////////////
 // Base dialog ID: after IDOK, IDCANCEL, etc.

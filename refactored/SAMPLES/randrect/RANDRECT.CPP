@@ -5,11 +5,11 @@
 // RANDRECT adapted for Windows++ from orignal program by 
 // Charles Petzold in "Programming Windows" Chapter 12.
 
-#include "prefix.h"
+#include "../prefix.h"
 
 MyApp myApp; // instantiate one and only app
 
-class RandRect : public WPMainWin {
+class RandRect final : public WPMainWin {
 public:
 	RandRect()					{ createWin("Windows++ Random Rectangles"); }
 	BOOL doIdle();				// virtual function called during idle loop
@@ -31,6 +31,8 @@ BOOL RandRect::doIdle()
 	WPWinDC dc = this;
 	dc.setBrush( RGB(rand()&255, rand()&255, rand()&255) );
 	dc.rectangle(box);
+
+	::Sleep(1000); // DBJ: otherwise it is too fast on modern year 2022 machines
 
 	return TRUE;			// tell Windows++ to do idle loop
 }

@@ -4,17 +4,17 @@
 // 
 // Single file editor.
 
-#include "prefix.h"
+#include "../prefix.h"
 
 MyApp myApp; // instantiate one and only app
 
 //////////////////
 // Main edit window class.
 // 
-class EditWin : public WPMainWin {
-	WPMultiEdit *editCtl;	// main edit window
-	int pmtHeight;				// height of prompt line font
-public:
+class EditWin final : public WPMainWin {
+  WPMultiEdit *editCtl{};  // main edit window
+  int pmtHeight{};         // height of prompt line font
+ public:
 	EditWin(LPCSTR fname=NULL);
 
 	// Virtual message functions

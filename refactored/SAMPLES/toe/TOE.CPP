@@ -5,12 +5,12 @@
 // This program "learns" to play tic-tac-toe by recording a history of all
 // its games and choosing moves that prove historically to win.
 
-#include "prefix.h"
+#include "../prefix.h"
 #include <time.h>
 
 MyApp myApp; // instantiate one and only app
 
-const SQM_CHECKED = 1;						 // message sent to parent
+constexpr int SQM_CHECKED = 1;						 // message sent to parent
 
 enum SQSTATE {
 	SQFREE= 1,									 // square is free
@@ -39,8 +39,8 @@ struct GAME {
 	int nmoves;									 // number of moves
 	int result;									 // whether I won, lost or drew
 };
-const NHISTORY = 50;							 // save this many games
-const NSQUARES = 9;							 // nine squares in board
+constexpr int NHISTORY = 50;							 // save this many games
+constexpr int NSQUARES = 9;							 // nine squares in board
 enum RESULT { LOSE=-1, DRAW=0, WIN=2 };
 
 //////////////////
