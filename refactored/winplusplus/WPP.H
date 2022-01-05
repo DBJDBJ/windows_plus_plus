@@ -9,8 +9,7 @@
 #ifndef WPP_H
 #define WPP_H
 
-#define STRICT	// strict type-checking for windows.h
-
+// DBJ: this header is included in RC files, obviously that will change
 #ifdef RC_INVOKED
 #include "windows.h"
 #else
@@ -27,8 +26,10 @@
 #	error "Unsupported compiler."
 #endif
 
+#define STRICT  // strict type-checking for windows.h
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include "windows.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

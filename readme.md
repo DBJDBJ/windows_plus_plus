@@ -18,10 +18,12 @@ Details
 Generally look into project properties. In particular:
 
 1. Every Project character set must be set to: "Not Set"
-   1. that is `_UNICODE` and `UNICODE` must be undefined
-   2. for some reason const had not type: `const whatever = 42`
-      1. so we changed all of them to `#define`'s
+   1. that is `_UNICODE` and `UNICODE` must be **undefined**
+   2. for some reason `const` had not type: `const whatever = 42`
+      1. I can not recall that was a legal C++ syntax in the past?
+      2. so we changed all of them to `#define`'s
 2. c++ exceptions are switched off
+3. https://stackoverflow.com/questions/55781685/how-to-get-clang-format-working-in-visual-studio
 
 
 ---

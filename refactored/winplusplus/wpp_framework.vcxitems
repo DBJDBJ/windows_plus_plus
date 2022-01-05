@@ -33,11 +33,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)WPWIN.CPP" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)dbjwin_strsafe.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)GPP.H" />
     <ClInclude Include="$(MSBuildThisFileDirectory)WPP.H" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)WPP.DEF" />
     <None Include="$(MSBuildThisFileDirectory)WPPRINT.DLG" />
   </ItemGroup>
 </Project>

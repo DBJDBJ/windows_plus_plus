@@ -3,7 +3,7 @@
 // FILE: HELLO.RC
 //
 //DBJ: why do we include the enormous wpp.h in here?
-#include "../../framework/wpp.h"
+#include "../../winplusplus/wpp.h"
 
 AppIcon	ICON hello.ico
 

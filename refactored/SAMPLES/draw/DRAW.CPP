@@ -5,7 +5,7 @@
 // Sample Object-Oriented Graphics Editor using GPP Graphics.
 
 #include "../prefix.h"
-#include <gpp.h>
+#include <winplusplus/gpp.h>
 #include "draw.h"
 
 MyApp myApp; // instantiate one and only app

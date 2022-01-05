@@ -5,6 +5,7 @@
 // Implementation for module, library and application objects.
 
 #include "wpp.h"
+#include "dbjwin_strsafe.h"
 #include <stdarg.h>
 #include <sys\types.h>
 #include <sys\stat.h>
@@ -278,11 +279,16 @@ BOOL WPApp::setProfile(LPCSTR key, int val, LPCSTR app)
 // 
 int DLLFUNC ErrBox(LPCSTR format, ...)
 {
-	char buf[128];
+  char buf[BUFSIZ]{};
 
 	va_list argptr;
 	va_start(argptr, format);
 	vsprintf(buf, format, argptr);
+        
+	if (S_OK != dbjwin_vsprintfa(buf, sizeof(buf), format, argptr)
+                                     ) {
+          DoAssert("dbjwin_vsprintfa failed", __FILE__,__LINE__);
+        }
 	va_end(argptr);
 	return MessageBox(NULL, buf, NULL, MB_OK | MB_ICONEXCLAMATION);
 }
@@ -296,8 +302,10 @@ int DLLFUNC StringCopy(char *dest, int buflen, LPCSTR src)
 	int rlen = lstrlen(src);
 	int len = min(buflen-1, rlen);
 	if (len>0) {
-		lstrcpyn(dest, src, len);
+		if ( lstrcpynA(dest, src, len))
 		dest[len]=0;
+                else 
+                  DoAssert("lstrcpynA failed", __FILE__,__LINE__);
 	}
 	return rlen;
 }
