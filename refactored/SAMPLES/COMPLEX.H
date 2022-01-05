@@ -5,12 +5,12 @@
 #ifndef COMPLEX_H
 #define COMPLEX_H
 
-typedef double REAL;		// could be float
+typedef float REAL;		// could be float or double
 
-class complex {
+class complex final {
 private:
-	REAL re;
-	REAL im;
+  REAL re{};
+ REAL im{};
 
 public:
 	complex()	{ re=0.; im=0.; }

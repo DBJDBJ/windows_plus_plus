@@ -4,17 +4,17 @@
 //
 // Sample program to generate and display the Mandelbrot Set
 
-#include "prefix.h"
+#include "../prefix.h"
 #include <time.h>
 #include "mandel.h"
-#include "complex.h"
+#include "../complex.h"
 
 MyApp myApp; // instantiate one and only app
 
-const MAXITERATIONS = 128;	// max number of iterations
-const DIVERGE = 4;			// sequence diverges if abs value greater than 4
-const MAXNCOLORS = 256;		// maximum number of colors to use
-const NSUBDIVISIONS = 20;	// subdivision of little rectangles
+constexpr int MAXITERATIONS = 128;	// max number of iterations
+constexpr int DIVERGE = 4;      // sequence diverges if abs value greater than 4
+constexpr int MAXNCOLORS = 256;  // maximum number of colors to use
+constexpr int NSUBDIVISIONS = 20;  // subdivision of little rectangles
 
 //////////////////
 // The main window
