@@ -2,7 +2,7 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: MEDIT.RC
 //
-#include "wpp.h"
+#include "../../winplusplus/wpp.h"
 
 AppMenu MENU { 
 	POPUP "&File" { 
@@ -71,4 +71,4 @@ STRINGTABLE {
 	WPIDM_WINCLOSEALL,"Close all windows."
 }
 
-#include "wpprint.dlg"
+#include "../../winplusplus/wpprint.dlg"

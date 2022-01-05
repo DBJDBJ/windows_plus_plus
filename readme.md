@@ -7,6 +7,10 @@
   - draw
   - hello 
   - launch
+  - mandel
+  - medit (has redraw issues)
+  - memtest
+  - mkc
 
 How does that look? Archaic. Is it working? Very much so. Simple, small and very functional Win32 C++ framework. Perfectly usable.
 

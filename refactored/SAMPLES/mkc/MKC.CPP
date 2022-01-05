@@ -6,13 +6,13 @@
 // Shows status of [NUM CAP SCROLL] LOCK, mouse buttons and cursor pos.
 // Also moves the cursor using arrow keys.
 
-#include "prefix.h"
+#include "../prefix.h"
 
 MyApp myApp; // instantiate one and only app
 
 int TABS[] = { 12, 25 };			// tab-stops (in text coords)
 const int NTABS = sizeof(TABS)/sizeof(TABS[0]);
-const VK_SCROLLLOCK = 0x91;		// code for scroll lock
+constexpr int VK_SCROLLLOCK = 0x91;		// code for scroll lock
 
 class MKCWin : public WPMainWin {
 	TEXTMETRIC tm;				// text metrics
@@ -57,32 +57,37 @@ void MKCWin::paint(WPPaintDC &dc)
 
 	WPPoint pt(tm.tmAveCharWidth, tm.tmHeight);
 
-	dc.printF(pt, "MOUSE:\t%sPRESENT\t", 
+	dc.printF(pt, (LPSTR)"MOUSE:\t%sPRESENT\t", 
 		Mouse.present() ? (LPCSTR)"" : (LPCSTR)"NOT ");
 	pt.y += tm.tmHeight;
 
 	char LMR[4]="LMR";
 	for (int i=0; i<3; i++) {
-		dc.printF(pt, "%cBUTTON:\t%s\t", LMR[i], button[i] ? 
+          dc.printF(pt, (LPSTR)"%cBUTTON:\t%s\t", LMR[i],
+                    button[i] ? 
 			(LPCSTR)"DOWN" : (LPCSTR)"UP");
 		pt.y += tm.tmHeight;
 	}
 
-	dc.printF(pt,"NUMLOCK:\t%s\t", Keyboard.state(VK_NUMLOCK) ? 
+	dc.printF(pt, (LPSTR) "NUMLOCK:\t%s\t",
+                  Keyboard.state(VK_NUMLOCK) ? 
 		(LPCSTR)"ON" : (LPCSTR)"OFF");
 	pt.y += tm.tmHeight;
 
-	dc.printF(pt,"CAPLOCK:\t%s\t", Keyboard.state(VK_CAPITAL) ?
+	dc.printF(pt, (LPSTR) "CAPLOCK:\t%s\t",
+                  Keyboard.state(VK_CAPITAL) ?
 		(LPCSTR)"ON" : (LPCSTR)"OFF");
 	pt.y += tm.tmHeight;
 
-	dc.printF(pt,"SCROLL:\t%s\t", Keyboard.state(VK_SCROLLLOCK) ?
+	dc.printF(
+            pt, (LPSTR) "SCROLL:\t%s\t",
+            Keyboard.state(VK_SCROLLLOCK) ?
 		(LPCSTR)"ON" : (LPCSTR)"OFF");
 	pt.y += tm.tmHeight;
 
 	WPPoint crs= Cursor();
 	screenToClient(&crs);
-	dc.printF(pt, "CURSOR:\t(%d,%d)\t", crs.x, crs.y);
+        dc.printF(pt, (LPSTR) "CURSOR:\t(%d,%d)\t", crs.x, crs.y);
 }
 
 //////////////////

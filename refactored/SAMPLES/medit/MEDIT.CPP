@@ -4,7 +4,7 @@
 //
 // Multi-file editor.
 
-#include "prefix.h"
+#include "../prefix.h"
 
 MyApp myApp; // instantiate one and only app
 

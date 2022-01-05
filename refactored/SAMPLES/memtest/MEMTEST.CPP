@@ -4,7 +4,7 @@
 //
 // "Memory Hog" program demonstrates Windows++ memory management.
 
-#include "prefix.h"
+#include "../prefix.h"
 
 MyApp myApp; // instantiate one and only app
 
@@ -16,7 +16,7 @@ public:
 	memBlock()	{ strcpy(str, "hello, world"); }
 };
 
-const BIGOBJSIZE = 1<<16;					// a large chunk of storage
+constexpr int BIGOBJSIZE = 1<<16;					// a large chunk of storage
 
 static memBlock * firstBlock = NULL;	// first small block in list
 static long objSize = 0;					// size of current obj to alloc

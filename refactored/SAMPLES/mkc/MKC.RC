@@ -2,7 +2,7 @@
 // WINDOWS++ CLASS LIBRARY.  Copyright 1992 Paul DiLascia.
 // FILE: MKC.RC
 //
-#include "wpp.h"
+#include "../../winplusplus/wpp.h"
 
 xcursor CURSOR mkc.cur
 
