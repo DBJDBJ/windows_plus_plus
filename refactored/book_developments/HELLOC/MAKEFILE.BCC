@@ -1,3 +1,0 @@
-hello.exe: hello.c
-	bcc32 -tW -w-par -DWIN32_LEAN_AND_MEAN hello.c
-	brc32 hello
