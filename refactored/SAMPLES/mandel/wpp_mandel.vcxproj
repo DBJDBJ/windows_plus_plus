@@ -159,11 +159,6 @@
     <ClCompile Include="MANDEL.CPP" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\winplusplus\winplusplus.vcxproj">
-      <Project>{8b6f7847-6adc-4d7f-91b0-f92996b8f36e}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="MANDEL.BMP" />
   </ItemGroup>
   <ItemGroup>
@@ -171,5 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MANDEL.RC" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\winplusplus\winplusplus.vcxproj">
+      <Project>{8b6f7847-6adc-4d7f-91b0-f92996b8f36e}</Project>
+    </ProjectReference>
   </ItemGroup>
 </Project>

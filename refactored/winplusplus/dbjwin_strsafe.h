@@ -5,13 +5,14 @@
  "normalization" of "crazy camel" strsafe.h function names
 
  ps: I do sincerely hope ucrt is not used to implement win32 strsafe 
+     implementations are all inline and available to review
 */
 #include <strsafe.h>
 
-// https://docs.microsoft.com/en-us/windows/win32/api/strsafe/nf-strsafe-stringcchprintfa
-
 //STRSAFEAPI StringCchLengthA([in] STRSAFE_PCNZCH psz, [in] size_t cchMax,
 //                            [out] size_t *pcchLength);
+// that is used to check if the lenght of the string is smaller or equalt to a limit
+// if it is S_OK is returned
 
 #undef dbjwin_strlena
 #define dbjwin_strlena StringCchLengthA

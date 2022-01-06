@@ -28,7 +28,7 @@ static LPCSTR KEYSCREENPOSY = "ScreenYPos";
 class Launch final : public WPDlgFileOpen {
   char dirname[MAXFILENAMELEN]{0};
   char filename[MAXFILENAMELEN]{0};
-  char debugString[30]{0};  // debugger program; e.g., "ZDBW /2"
+  char debugString[BUFSIZ]{0};  // debugger program; e.g., "ZDBW /2"
   WPEdit* edFileName{};     // edit control for file name
   WPListBox* lbFileName{};  // list box for file name
   WPStatic* ssPathName{};   // static text of path name
@@ -38,8 +38,9 @@ class Launch final : public WPDlgFileOpen {
 
   Launch() : WPDlgFileOpen(NULL, filename, "Launch") {
     // Read stuff from WIN.INI
-    theApp->getProfile(KEYDEBUGSTR, debugString, sizeof(debugString));
-    theApp->getProfile(KEYDIR, dirname, sizeof(dirname));
+    // DBJ2022: or rather from the private ini file
+    theApp->getProfile(KEYDEBUGSTR, debugString, sizeof(debugString), "Not found");
+    theApp->getProfile(KEYDIR, dirname, sizeof(dirname), "Not found");
 
     // Override default OFN data
     ofn.Flags |= OFN_SHOWHELP;
@@ -50,17 +51,18 @@ class Launch final : public WPDlgFileOpen {
 };
 
 void MyApp::main() {
-  useWININI = TRUE;  // use WIN.INI for profile
-  Launch dlg;        // create dialog
-  dlg.run();         // ..run it
+  // DBJ 2022 REMOVED: useWININI = TRUE;  // use WIN.INI for profile
+  Launch dlg;  // create dialog
+  dlg.run();   // ..run it
 }
 
 ////////////////
 // Initialize the dialog box.  Use screen position from WIN.INI,
 // set filespec to *.exe, add command to ventilator (system) menu.
 //
-void Launch::initDlg() {
-  setPos(theApp->getProfile(KEYSCREENPOSX), theApp->getProfile(KEYSCREENPOSY));
+void Launch::initDlg() 
+{
+  setPos(theApp->getProfile(KEYSCREENPOSX, 100), theApp->getProfile(KEYSCREENPOSY, 100));
 
   edFileName = new WPEdit(this, IDOFN_EDFILENAME);
   lbFileName = new WPListBox(this, IDOFN_LBFILENAME);
@@ -81,35 +83,25 @@ void Launch::initDlg() {
 }
 
 BOOL Launch::command(int id, WORD msg) {
-
-    int err{};
+  int err{};
   char wincmd[2 * BUFSIZ]{};  // it's 2022 after all :)
 
   switch (id) {
     case IDOK:
-    case IDOFN_PBHELP:
+    case IDOFN_PBHELP: {
       edFileName->getText(filename, sizeof(filename));
       if (filename[0] == 0)            // no file name:
         lbFileName->getSel(filename);  // ..try list box
 
       // Execute program. Pre-pend debugger string if requested.
       if (id == IDOFN_PBHELP) {
-        // pre-pend debugger string to executable file name
-        //strcat(wincmd, debugString);
-        //strcat(wincmd, " ");
-
-        if (S_OK != dbjwin_sprintfa(wincmd, sizeof(wincmd), "%s %s ", wincmd,
-                                    debugString)) {
-          ErrBox("dbjwin_sprintfa failed, \n file:", __FILE__);
-          return FALSE;
-        }
+        dbjwin_verify(S_OK == dbjwin_sprintfa(wincmd, sizeof(wincmd), "%s %s ",
+                                              wincmd, debugString));
       }
 
-      if (S_OK !=
-          dbjwin_sprintfa(wincmd, sizeof(wincmd), "%s %s", wincmd, filename)) {
-        ErrBox("dbjwin_sprintfa failed, \n file:", __FILE__);
-        return FALSE;
-      }
+      dbjwin_verify(S_OK == dbjwin_sprintfa(wincmd, sizeof(wincmd), "%s %s",
+                                            wincmd, filename));
+
 #pragma warning(suppress : 28159)
       err = WinExec(wincmd, SW_SHOWNORMAL);
       if (err == 2)
@@ -117,7 +109,7 @@ BOOL Launch::command(int id, WORD msg) {
       else if (err <= 32)
         ErrBox("Error %d from WinExec", err);
       return TRUE;  // ( DON'T exit dialog )
-
+    }
     case IDCANCEL: {
       // Exit: save stuff in profile
       WPWindowRect pos = this;

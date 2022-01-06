@@ -92,7 +92,7 @@ Mandelbrot::Mandelbrot()
 	createArgs.wndcls.hCursor = NULL;	// we will set our own cursor
 	createWin("Mandelbrot Set");	// create window
 	time_t ntime;						// seed for random num generator
-	srand(time(&ntime));				// ..
+	srand((unsigned)(time(&ntime)));				// ..
 
 	// Allocate array of colors
 	WPWinDC dc = this;
@@ -126,8 +126,8 @@ BOOL Mandelbrot::fileNew()
 	for (int i=0; i<ncolors; i++)
 		colors[i] = 
 			dc.nearestColor(RGB(5+rand()%250, 5+rand()%250, 5+rand()%250));
-	cmin.set(-2.0, -1.2);	// default region in complex plane
-	cmax.set(1.2, 1.2);		// ..to show
+        cmin.set((REAL)-2.0, (REAL)-1.2);  // default region in complex plane
+        cmax.set((REAL)1.2, (REAL)1.2);    // ..to show
 	init();
 	return TRUE;
 }

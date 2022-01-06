@@ -316,7 +316,7 @@ BOOL DrawWin::command(int id, WORD msg)
 	case ID_EDITDUP:
 		if (hilite) {
 			GPShape *shp = hilite->shape();
-			shapes.add(shp->dup());
+                  shapes.add(hilite->dup());
 			setHilite(shp);
 		}
 		return TRUE;

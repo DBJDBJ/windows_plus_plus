@@ -4,8 +4,8 @@
 //
 // Implementation of Windows++ Graphics system.
 
-#include "wpp.h"
-#include "gpp.h"
+// #include "wpp.h"
+#include "GPP.h"
 
 WPRect	GPShape::ClipRect;
 BOOL		GPShape::DoClip=FALSE;
